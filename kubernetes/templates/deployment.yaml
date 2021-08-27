@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nats-config-reloader
+  name: nats-config-reloader
+  namespace: nats-io
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nats-config-reloader
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: nats-config-reloader
+    spec:
+      serviceAccount: nats-config-reloader
+      containers:
+      - image: quay.io/edribeirojunior/nats-config-reloader:v0.0.1
+        name: nats-config-reloader
+        args: 
+        - --nats-name
+        - "plat-dev-eu-west-1-02"
+        - --timeout
+        - "15"
+        imagePullPolicy: Always
+        resources: {}
