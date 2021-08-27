@@ -45,7 +45,7 @@ func GetResource(ctx context.Context, cfg *rest.Config, s, ns string) (*unstruct
 		return nil, err
 	}
 
-	unsTruct, err = client.Resource(mapping.Resource).Namespace(ns).Get(ctx, obj.GetName(), metav1.GetOptions{})
+	unsTruct, err := client.Resource(mapping.Resource).Namespace(ns).Get(ctx, obj.GetName(), metav1.GetOptions{})
 	if err != nil {
 		log.Printf("It was not possible to get the object")
 		return nil, err

@@ -12,7 +12,7 @@ var hostedZoneName, dnsName, natsObject, natsNamespace string
 var natsTimeout int
 
 var rootCmd = &cobra.Command{
-	User:  "nats-config-reloader",
+	Use:   "nats-config-reloader",
 	Short: "Nats Config Reloader",
 	Long:  "Nats Config Reloader is lightweight binary that will handle nats-cluster configuration",
 	Run: func(cmd *cobra.Command, args []string) {

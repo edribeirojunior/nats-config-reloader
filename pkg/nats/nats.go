@@ -16,8 +16,23 @@ func ConfigReloader(dnsName, hostedZoneName, natsObj, natsNs string, timeout int
 
 	for {
 		nServers := aws.GetConfig(dnsName, hostedZoneName)
+		md := &Metadata{
+			Name:      natsObj,
+			Namespace: natsNs,
+		}
 
-		unstruct, err := k8s.GetResource(context.TODO(), cfg, natsObj, natsNs)
+		nCluster := &NatsGetCluster{
+			ApiVs:    "nats.io/v1alpha2",
+			Kind:     "NatsCluster",
+			Metadata: *md,
+		}
+
+		data, err := json.Marshal(nCluster)
+		if err != nil {
+			log.Println(err.Error())
+		}
+
+		unstruct, err := k8s.GetResource(context.TODO(), cfg, string(data), natsNs)
 
 		if err != nil {
 			log.Println(err)
@@ -48,8 +63,8 @@ func ConfigReloader(dnsName, hostedZoneName, natsObj, natsNs string, timeout int
 			if natsObject.Spec.Size > 1 {
 
 				for i := 1; i < int(natsObject.Spec.Size); i++ {
-					podName := fmt.Sprintf("%s-%i", natsObj, i)
-					err := k8s.deletePod(podName, natsNs)
+					podName := fmt.Sprintf("%s-%d", natsObj, i)
+					err := k8s.DeletePod(podName, natsNs)
 					if err != nil {
 						log.Println(err.Error())
 					}
@@ -58,7 +73,7 @@ func ConfigReloader(dnsName, hostedZoneName, natsObj, natsNs string, timeout int
 
 		}
 
-		time.Sleep(time.Second * timeout)
+		time.Sleep(time.Second * time.Duration(timeout))
 
 	}
 

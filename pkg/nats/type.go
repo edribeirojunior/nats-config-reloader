@@ -4,16 +4,14 @@ type NatsCluster struct {
 	ApiVs    string `json:"apiVersion"`
 	Kind     string `json:"Kind"`
 	Metadata `json:"metadata"`
-	Spec     struct {
-		Auth
-		GatewayConfig
-		NatsConfig
-		Pod
-		Size    `json:"size"`
-		Version `json:"version"`
-	}
+	Spec     `json:"spec"`
 }
 
+type NatsGetCluster struct {
+	ApiVs    string `json:"apiVersion"`
+	Kind     string `json:"Kind"`
+	Metadata `json:"metadata"`
+}
 type NatsConfig struct {
 	Debug bool `json:"debug"`
 	Trace bool `json:"trace"`
@@ -43,6 +41,15 @@ type Version string
 type Metadata struct {
 	Name      string `json:"name"`
 	Namespace string `json:"namespace"`
+}
+
+type Spec struct {
+	Auth
+	GatewayConfig
+	NatsConfig
+	Pod
+	Size    `json:"size"`
+	Version `json:"version"`
 }
 
 type Auth struct {
